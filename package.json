@@ -1,0 +1,17 @@
+{
+  "name": "task-planner",
+  "version": "1.0.0",
+  "description": "schedule and task planning tool for study, work, and more",
+  "main": "index.js",
+  "scripts": {
+    "frontend": "npm run dev --prefix ./frontend",
+    "backend": "npm run dev --prefix ./backend",
+    "dev": "concurrently --name \"FRONTEND,BACKEND\" --prefix-colors \"blue,green\" \"npm run dev --prefix ./frontend\" \"npm run dev --prefix ./backend\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
