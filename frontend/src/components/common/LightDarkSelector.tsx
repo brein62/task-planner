@@ -5,17 +5,20 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { useTheme } from "../theme-provider"
+} from "@/components/ui/select";
+import { useTheme } from "../theme-provider";
 
 /**
  * Sets the theme of the app (light/dark mode).
  */
 export default function LightDarkSelector() {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme } = useTheme();
 
   return (
-    <Select defaultValue={theme} onValueChange={(value) => setTheme(value as "light" | "dark" | "system")}>
+    <Select
+      defaultValue={theme}
+      onValueChange={(value) => setTheme(value as "light" | "dark" | "system")}
+    >
       <SelectTrigger className="w-[140px]">
         <SelectValue />
       </SelectTrigger>
@@ -27,5 +30,5 @@ export default function LightDarkSelector() {
         </SelectGroup>
       </SelectContent>
     </Select>
-  )
+  );
 }

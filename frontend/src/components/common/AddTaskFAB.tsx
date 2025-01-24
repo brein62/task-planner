@@ -1,24 +1,30 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Plus } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { useState } from "react";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export function AddTaskFAB() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [taskName, setTaskName] = useState("")
+  const [isOpen, setIsOpen] = useState(false);
+  const [taskName, setTaskName] = useState("");
 
   const handleAddTask = () => {
     if (taskName.trim()) {
-      console.log("Adding task:", taskName)
+      console.log("Adding task:", taskName);
       // Here you would typically add the task to your state or send it to an API
-      setTaskName("")
-      setIsOpen(false)
+      setTaskName("");
+      setIsOpen(false);
     }
-  }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -54,6 +60,5 @@ export function AddTaskFAB() {
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-
