@@ -1,6 +1,23 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Model, Types } from "mongoose";
+import { IUser } from "./User";
 
-const eventSchema = new mongoose.Schema(
+export interface IEvent extends Document {
+  title: string;
+  startDate: Date;
+  endDate: Date;
+  categories: string[]; // Array of strings
+  location?: string; // Optional
+  notes?: string; // Optional description (Markdown)
+  url?: string; // Optional, validated URL
+  isOnline: boolean; // Required field
+  isAllDay: boolean; // Required field
+  isActiveEvent: boolean; // Required field
+  user: Types.ObjectId | IUser; // Reference to the user, populated or not
+  createdAt: Date; // Automatically added by Mongoose timestamps
+  updatedAt: Date; // Automatically added by Mongoose timestamps
+}
+
+const eventSchema = new mongoose.Schema<IEvent>(
   {
     title: { type: String, required: true },
     startDate: { type: Date, required: true },
@@ -23,10 +40,12 @@ const eventSchema = new mongoose.Schema(
     },
     isOnline: { type: Boolean, required: true, default: false },
     isAllDay: { type: Boolean, required: true, default: false },
-    isActive: { type: Boolean, required: true, default: true },
-    // user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Reference to the user
+    isActiveEvent: { type: Boolean, required: true, default: true },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Reference to the user
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Event", eventSchema);
+const Event: Model<IEvent> = mongoose.model<IEvent>("Event", eventSchema);
+
+export default Event;

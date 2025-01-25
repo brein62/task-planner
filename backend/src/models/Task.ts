@@ -1,6 +1,21 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Model, Types } from "mongoose";
+import { IUser } from "./User";
 
-const taskSchema = new mongoose.Schema(
+export interface ITask extends Document {
+  title: string;
+  dueDate?: Date; // Optional
+  categories: string[]; // Array of strings
+  location?: string; // Optional
+  notes?: string; // Optional description (Markdown)
+  status: "pending" | "completed" | "inactive"; // Enum with specific allowed values
+  url?: string; // Optional, validated URL
+  isOnline: boolean; // Required field
+  user: Types.ObjectId | IUser; // Reference to the user, populated or not
+  createdAt: Date; // Automatically added by Mongoose timestamps
+  updatedAt: Date; // Automatically added by Mongoose timestamps
+}
+
+const taskSchema = new mongoose.Schema<ITask>(
   {
     title: { type: String, required: true },
     dueDate: { type: Date },
@@ -26,9 +41,12 @@ const taskSchema = new mongoose.Schema(
       },
     },
     isOnline: { type: Boolean, required: true, default: false },
-    // user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Reference to the user
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Reference to the user
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Task", taskSchema);
+// Task model
+const Task: Model<ITask> = mongoose.model<ITask>("Task", taskSchema);
+
+export default Task;
