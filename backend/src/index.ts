@@ -1,17 +1,19 @@
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import express, { Express, Request, Response , Application } from 'express';
-import dotenv from 'dotenv';
-import { PORT } from './config';
+import express, { Express, Request, Response, Application } from "express";
+import dotenv from "dotenv";
+import { PORT } from "./config";
 import connectMongoDB from "./connectDB";
+import authRouter from "./routes/authRoutes";
+import userRouter from "./routes/userRoutes";
 
-//For env File 
+//For env File
 dotenv.config();
 
 const app: Application = express();
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Welcome to Express & TypeScript Server');
+app.get("/", (req: Request, res: Response) => {
+  res.send("Welcome to Express & TypeScript Server");
 });
 
 // CORS Configuration
@@ -26,8 +28,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors(corsOptions));
 app.use(cookieParser());
 
+// Route handlers
+app.use("/auth", authRouter);
+app.use("/users", userRouter);
 
 app.listen(PORT, () => {
-  console.log(`Server is Fire at http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
   connectMongoDB();
 });
