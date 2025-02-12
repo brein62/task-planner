@@ -1,7 +1,10 @@
+import { sendSignupRequest } from "@/api/user";
 import ErrorBox from "@/components/common/ErrorBox";
 import PageContainer from "@/components/common/PageContainer";
+import { PublicLayout } from "@/components/common/PublicLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/contexts/authContext";
 import React, { useState } from "react";
 import { Link } from "react-router";
 
@@ -10,6 +13,7 @@ const Signup: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { login } = useAuth();
 
   const validateEmail = (email: string) => {
     const re = /\S+@\S+\.\S+/;
@@ -32,54 +36,68 @@ const Signup: React.FC = () => {
     }
     setError("");
     // Handle successful signup here
+    
+    // try logging in
+    sendSignupRequest(username, email, password).then(response => {
+      if (response.status === 200 || response.status === 201) {
+        console.log(response);
+        login("", username, email, false);
+      } else {
+        console.error("There was an error logging the user in:", response.message);
+        setError(response.message);
+      }
+    })
+
     console.log("Signup successful");
   };
 
   return (
-    <PageContainer title="Task Planner">
-      <div className="flex flex-col gap-4">
-        <h3 className="text-center text-2xl font-medium">Sign up</h3>
-        <form
-          className="mx-auto w-full max-w-md text-center px-4 flex flex-col gap-3"
-          onSubmit={handleSubmit}
-        >
-          <div className="flex flex-col gap-2">
-            <label>Username:</label>
-            <Input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label>Email:</label>
-            <Input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label>Password:</label>
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          {error && <ErrorBox message={error} />}
-          <div>
-            <Button type="submit">Sign Up</Button>
-          </div>
-          <div>
-            <Link to="/login">Already have an account? Log in</Link>
-          </div>
-        </form>
-      </div>
-    </PageContainer>
+    <PublicLayout>
+      <PageContainer title="Task Planner">
+        <div className="flex flex-col gap-4">
+          <h3 className="text-center text-2xl font-medium">Sign up</h3>
+          <form
+            className="mx-auto w-full max-w-md text-center px-4 flex flex-col gap-3"
+            onSubmit={handleSubmit}
+          >
+            <div className="flex flex-col gap-2">
+              <label>Username:</label>
+              <Input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label>Email:</label>
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label>Password:</label>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            {error && <ErrorBox message={error} />}
+            <div>
+              <Button type="submit">Sign Up</Button>
+            </div>
+            <div>
+              <Link to="/login">Already have an account? Log in</Link>
+            </div>
+          </form>
+        </div>
+      </PageContainer>
+    </PublicLayout>
   );
 };
 
